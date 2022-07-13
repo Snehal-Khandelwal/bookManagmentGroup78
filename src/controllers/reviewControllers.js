@@ -86,7 +86,7 @@ const deleteReview = async function (req, res) {
     if (!requiredBook) return res.status(404).send({ status: false, message: "No Such book present" })
     const reviewId = req.params.reviewId;
     if (!mongoose.Types.ObjectId.isValid(reviewId)) return res.status(400).send({ status: false, message: "invalid reviewId" })
-    const requiredReview = await reviewModel.findOne({ _id: reviewId, isDeleted: false })
+    const requiredReview = await reviewModel.findOne({ _id: reviewId, bookId:bookId isDeleted: false })
     if (!requiredReview) return res.status(404).send({ status: false, message: "No Such review present" });
 
     const deletedReview = await reviewModel.findOneAndUpdate({ _id: reviewId, bookId:bookId, isDeleted:false}, { isDeleted: true, deletedAt: new Date() }, { new: true })
