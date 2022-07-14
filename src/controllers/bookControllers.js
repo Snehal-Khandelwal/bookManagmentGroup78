@@ -2,6 +2,7 @@ const bookModel = require("../models/booksModel.js")
 const mongoose = require("mongoose");
 const reviewModel = require("../models/reviewModel.js");
 const userModel = require("../models/userModel.js");
+const file =  require("../controllers/aws-file.js");
 
 const myISBN = /^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/;
 const myDate = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/;
@@ -47,14 +48,14 @@ const createBook = async function (req, res) {
 
         if (releasedAt === null || releasedAt === undefined || releasedAt.trim().length == 0) return res.status(400).send({ status: false, message: "please enter date of release" })
         if (!myDate.test(releasedAt)) return res.status(400).send({ status: false, message: "please enter date in yyyy-mm-dd format only" })
+        const files = req.files
+        if(files && files.length>0){
+            //upload to s3 and get the uploaded link
+            // res.send the link back to frontend/postman
+            var uploadedFileURL= await file.uploadFile( files[0] )
+        }
 
-        // if(files && files.length>0){
-        //     //upload to s3 and get the uploaded link
-        //     // res.send the link back to frontend/postman
-        //     var uploadedFileURL= await route.uploadFile( files[0] )
-        // }
-
-        //  data.bookCover = "uploadedFileURL"
+         data.bookCover = uploadedFileURL
         //======================================Creating user==========================//
         let book = await bookModel.create(data)
         return res.status(201).send({ status: true, message: "Success", data: book })

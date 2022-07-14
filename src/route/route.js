@@ -12,7 +12,7 @@ router.post('/register', userControllers.createUser)
 
 router.post('/login', userControllers.userLogin)
 
-router.post('/books', MW.isTokenValid, bookControllers.createBook)
+router.post('/books',MW.isTokenValid,  bookControllers.createBook)
 
 router.get('/books', MW.isTokenValid, bookControllers.getBooks)
 
@@ -28,7 +28,7 @@ router.put('/books/:bookId/review/:reviewId' , reviewControllers.updateReview )
 
 router.delete('/books/:bookId/review/:reviewId' , reviewControllers.deleteReview )
 
-router.post("/write-file-aws", awsControllers.createURL)
+// router.post("/write-file-aws", awsControllers.createURL)
 
 
 module.exports = router
